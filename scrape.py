@@ -1,6 +1,7 @@
 import omdb
 import auth
 import pandas as pd
+from collections import ChainMap
 
 omdb.set_default('apikey', auth.api_key)
 
@@ -26,7 +27,8 @@ movies = [
     { 'title': 'A Quiet Place', 'year': 2018 },
     { 'title': 'Veronica', 'year': 2017 },
     { 'title': 'Creep', 'year': 2014 },
-    { 'title': 'Open House', 'year': 2018 }
+    { 'title': 'The Open House', 'year': 2018 },
+    { 'title': 'A Dark Song', 'year': 2016 }
 ]
 
 desiredKeys = ['title', 'year', 'genre', 'ratings']
@@ -38,6 +40,15 @@ for d in movies:
         movieRatings.append(temp)
 
 # https://stackoverflow.com/questions/54017178/pandas-flatten-a-column-which-is-a-list-of-dictionaries
+newList = []
+for movie in movieRatings:
+    temp = {}
+    for d in movie['ratings']:
+        temp[list(d.values())[0]] = list(d.values())[1]
+    movie.pop('ratings', None)
+    movie = {**movie, **temp}
+    newList.append(movie)
 
-movieDF = pd.DataFrame(movieRatings, columns = desiredKeys)
+movieDF = pd.DataFrame(newList, columns = [key for key in newList[0].keys()], dtype='object')
 # print(movieDF.head(5))
+movieDF.to_csv('movie_ratings.csv', index=False)
