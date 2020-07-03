@@ -29,3 +29,7 @@ movieRaw[objType] = movieRaw[objType].astype('float')
 movieRaw['meanRating'] = movieRaw[['StephenRating', 'DannyRating']].mean(axis=1)
 print(movieRaw[['StephenRating', 'DannyRating']].corr()) #r = 0.891
 # print(movieRaw.head(5))
+
+movieRaw = movieRaw.fillna(-1000)
+
+movieRaw.to_csv('movie_ratings_clean.csv')

@@ -1,7 +1,6 @@
 import omdb
 import auth
 import pandas as pd
-from collections import ChainMap
 
 omdb.set_default('apikey', auth.api_key)
 
